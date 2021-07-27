@@ -24,6 +24,7 @@ class CreateEmployeesTable extends Migration
             $table->foreignId('user_id')->constrained()
                                         ->onDelete('cascade')
                                         ->onUpdate('cascade');
+                                        
             $table->foreignId('department_id')->constrained();
             $table->timestamps();
         });
