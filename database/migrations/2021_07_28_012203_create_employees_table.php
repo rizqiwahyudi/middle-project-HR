@@ -21,7 +21,9 @@ class CreateEmployeesTable extends Migration
             $table->foreign('company_id')->references('id')->on('companies');
             $table->string('email')->nullable()->unique();
             $table->string('telepon')->nullable();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()
+                                        ->onDelete('cascade')
+                                        ->onUpdate('cascade');
             $table->foreignId('department_id')->constrained();
             $table->timestamps();
         });
