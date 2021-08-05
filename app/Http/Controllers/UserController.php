@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Company;
+use App\Models\Department;
 use Illuminate\Http\Request;
+use Auth;
 
 class UserController extends Controller
 {
@@ -12,9 +15,32 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //
+        $user = Auth::user();
+
+        if ($user->role == 'admin') {
+
+            $companies = Company::count();
+            $departments = Department::count();
+            $employees = User::count();
+
+            return view('admin.index', compact(
+                'user', 
+                'companies', 
+                'departments', 
+                'employees'
+            ));
+            // return view('admin.index');
+        }
+            
+        return view('user.index', compact('user'));
     }
 
     /**

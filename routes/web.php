@@ -13,10 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('home');
+// });
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => ['auth', 'Role:admin']], function(){
+
+Route::get('/dashboard/admin', [App\Http\Controllers\UserController::class, 'index'])->name('dashboard.admin');
+
+});
+
+
+Route::group(['middleware' => ['auth', 'Role:user']], function(){
+
+Route::get('/dashboard/user', [App\Http\Controllers\UserController::class, 'index'])->name('dashboard.user');
+
+});
