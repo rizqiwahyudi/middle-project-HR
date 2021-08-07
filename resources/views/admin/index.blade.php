@@ -1,46 +1,8 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Admin Dashboard')
+@section('title', '- Admin Dashboard')
 
 @section('content')
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-        <div class="breadcrumbs">
-            <div class="col-sm-4">
-                <div class="page-header float-left">
-                    <div class="page-title">
-                        <h1>{{ __('Admin Dashboard') }}</h1>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="col-sm-8">
-                <div class="page-header float-right">
-                    <div class="page-title">
-                        <ol class="breadcrumb text-right">
-                            <li class="active">Dashboard</li>
-                        </ol>
-                    </div>
-                </div>
-            </div> -->
-        </div>
 
         <div class="content mt-3">
 
@@ -77,7 +39,7 @@
                                     <div class="stat-content">
                                         <div class="text-left dib">
                                             <div class="stat-heading">Users</div>
-                                            <div class="stat-text">Total: {{$employees}}</div>
+                                            <div class="stat-text">Total: {{$employeesCount}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +57,7 @@
                                     <div class="stat-content">
                                         <div class="text-left dib">
                                             <div class="stat-heading">Departments</div>
-                                            <div class="stat-text">Total: {{$departments}}</div>
+                                            <div class="stat-text">Total: {{$departmentsCount}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -113,10 +75,60 @@
                                     <div class="stat-content">
                                         <div class="text-left dib">
                                             <div class="stat-heading">Companies</div>
-                                            <div class="stat-text">Total: {{$companies}}</div>
+                                            <div class="stat-text">Total: {{$companiesCount}}</div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title">Data User</strong>
+                            </div>
+                            <div class="card-body">
+                                <table id="bootstrap-data-table" class="table table-striped table-bordered table-responsive">
+                                    <thead>
+                                      <tr>
+                                        <th>No</th>
+                                        <th>Username</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Telepon</th>
+                                        <th>Company</th>
+                                        <th>Department</th>
+                                        <th>Role</th>
+                                        <th>Action</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      @foreach($users as $user)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$user->username}}</td>
+                                            <td>{{$user->first_name}}</td>
+                                            <td>{{$user->last_name}}</td>
+                                            <td>
+                                                <a href="mailto:{{$user->email}}">{{$user->email}}</a>
+                                            </td>
+                                            <td>
+                                                <a href="tel:{{$user->telepon}}">{{$user->telepon}}</a>
+                                            </td>
+                                            <td>{{$user->company->name}}</td>
+                                            <td>{{$user->department->name}}</td>
+                                            <td>{{$user->role}}</td>
+                                            <td>
+                                                <a href="{{route('show.user', [$user->id])}}"><i class="fa fa-eye"></i></a>
+                                                <a href="{{route('edit.user', [$user->id])}}"><i class="fa fa-edit"></i></a>
+                                                <a href="{{route('user.delete', [$user->id])}}" onclick="return confirm('Apakah anda yakin ?')"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                      @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
