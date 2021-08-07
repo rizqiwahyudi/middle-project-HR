@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Company;
+use App\Models\Department;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -30,8 +32,8 @@ class UserFactory extends Factory
             'email'             => $this->faker->unique()->safeEmail(),
             'telepon'           => $this->faker->unique()->phoneNumber(),
             'password'          => Hash::make('password123'), // password
-            'company_id'        => mt_rand(1,7),
-            'department_id'     => mt_rand(1,7),
+            'company_id'        => mt_rand(1, Company::count()),
+            'department_id'     => mt_rand(1, Department::count()),
             'remember_token'    => Str::random(10),
         ];
     }
