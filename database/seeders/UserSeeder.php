@@ -16,7 +16,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
         User::create([
             'username' => 'admin',
             'first_name' => 'admin',
@@ -41,5 +40,7 @@ class UserSeeder extends Seeder
             'department_id' => 2,
             'remember_token' => Str::random(10),
         ]);
+
+        User::factory(50)->create();
     }
 }

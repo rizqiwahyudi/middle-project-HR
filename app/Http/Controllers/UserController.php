@@ -30,10 +30,10 @@ class UserController extends Controller
 
         if ($user->role == 'admin') {
 
-            $users = User::all();
-            $companiesCount = Company::count();
-            $departmentsCount = Department::count();
-            $employeesCount = User::count();
+            $users              = User::all();
+            $companiesCount     = Company::count();
+            $departmentsCount   = Department::count();
+            $employeesCount     = User::count();
 
             return view('admin.index', compact(
                 'users', 
@@ -54,8 +54,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $companies = Company::all();
-        $departments = Department::all();
+        $companies      = Company::all();
+        $departments    = Department::all();
         return view('admin.create-user', compact('companies', 'departments'));
     }
 

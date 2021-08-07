@@ -27,5 +27,7 @@ class CompanySeeder extends Seeder
             'logo' => 'logo.png',
             'website_url' => 'https://wimisec.or.id',
         ]);
+
+        Company::factory(5)->create();
     }
 }

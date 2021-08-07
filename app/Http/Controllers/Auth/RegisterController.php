@@ -52,8 +52,8 @@ class RegisterController extends Controller
      */
     protected function showRegistrationForm()
     {
-        $companies = Company::all();
-        $departments = Department::all();
+        $companies      = Company::all();
+        $departments    = Department::all();
 
         return view('auth.register', compact(['companies', 'departments']));
     }
@@ -61,14 +61,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'first_name' => ['required', 'string', 'max:100'],
-            'last_name' => ['required', 'string', 'max:100'],
-            'telepon' => ['required', 'numeric', 'digits_between:10,13', 'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'company' => ['required', 'not_in:0'],
-            'department' => ['required', 'not_in:0'],
+            'username'      => ['required', 'string', 'max:255', 'unique:users'],
+            'first_name'    => ['required', 'string', 'max:100'],
+            'last_name'     => ['required', 'string', 'max:100'],
+            'telepon'       => ['required', 'numeric', 'digits_between:10,13', 'unique:users'],
+            'email'         => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'      => ['required', 'string', 'min:8', 'confirmed'],
+            'company'       => ['required', 'not_in:0'],
+            'department'    => ['required', 'not_in:0'],
         ]);
     }
 
@@ -81,13 +81,13 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'username' => $data['username'],
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'telepon' => $data['telepon'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'company_id' => $data['company'],
+            'username'      => $data['username'],
+            'first_name'    => $data['first_name'],
+            'last_name'     => $data['last_name'],
+            'telepon'       => $data['telepon'],
+            'email'         => $data['email'],
+            'password'      => Hash::make($data['password']),
+            'company_id'    => $data['company'],
             'department_id' => $data['department'],
         ]);
     }

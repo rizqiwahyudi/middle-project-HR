@@ -94,7 +94,12 @@
                                 <select class="form-control @error('company') is-invalid @enderror" name="company" id="select_company" required>
                                     <option value="">-- Select Company --</option>
                                     @foreach($companies as $company)
-                                        <option value="{{$company->id}}" {{$user->company_id == $company->id ? "selected":""}}>{{$company->name}}</option>
+                                        @if ($company->id == $user->company_id)
+                                            @php($select = 'selected')
+                                        @else
+                                            @php($select = '')
+                                        @endif
+                                        <option {{$select}} value="{{$company->id}}">{{$company->name}}</option>
                                     @endforeach
                                 </select>
 
@@ -113,7 +118,12 @@
                                 <select class="form-control @error('department') is-invalid @enderror" name="department" id="select_department" required>
                                     <option value="">-- Select Department --</option>
                                     @foreach($departments as $department)
-                                        <option value="{{$department->id}}" {{$user->department_id == $department->id ? "selected":""}}>{{$department->name}}</option>
+                                        @if ($department->id == $user->department_id)
+                                            @php($select = 'selected')
+                                        @else
+                                            @php($select = '')
+                                        @endif
+                                        <option {{$select}} value="{{$department->id}}">{{$department->name}}</option>
                                     @endforeach
                                 </select>
 
@@ -131,8 +141,8 @@
                             <div class="col-md-6">
                                 <select class="form-control @error('role') is-invalid @enderror" name="role" id="select_role" required>
                                     <option value="">-- Select Role --</option>
-                                        <option value="admin" {{$user->role == "admin" ? "selected":""}}>Admin</option>
-                                        <option value="user" {{$user->role == "user" ? "selected":""}}>User</option>
+                                        <option value="admin" {{($user->role == 'admin') ? 'selected':''}}>Admin</option>
+                                        <option value="user" {{($user->role == 'user') ? 'selected':''}}>User</option>
                                 </select>
 
                                 @error('role')

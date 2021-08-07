@@ -23,5 +23,7 @@ class DepartmentSeeder extends Seeder
             'name' => 'Sales & Marketing',
             'description' => 'Responsible for sales and marketing of products produced by the company',
         ]);
+
+        Department::factory(5)->create();
     }
 }
