@@ -39,8 +39,8 @@
                                 <strong class="card-title">Data Department</strong>
                             </div>
                             <div class="card-body">
-                                <a href="" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add Department</a><br><br>
-                                <table id="bootstrap-data-table" class="table table-striped table-bordered table-responsive">
+                                <a href="{{route('departments.create')}}" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add Department</a><br><br>
+                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                       <tr>
                                         <th>No</th>
@@ -56,9 +56,14 @@
                                             <td>{{$department->name}}</td>
                                             <td>{{$department->description}}</td>
                                             <td>
-                                                <a href=""><i class="fa fa-eye"></i></a>
-                                                <a href=""><i class="fa fa-edit"></i></a>
-                                                <a href="" onclick="return confirm('Apakah anda yakin ?')"><i class="fa fa-trash-o"></i></a>
+                                                <a href="{{route('departments.edit', [$department->id])}}"><i class="fa fa-edit"></i></a>
+                                                <form action="{{route('departments.destroy', [$department->id])}}" method="POST" class="d-inline">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" style="border: none;" onclick="return confirm('Apakah anda yakin ?')">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                       @endforeach

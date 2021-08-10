@@ -39,14 +39,12 @@
                                 <strong class="card-title">Data Company</strong>
                             </div>
                             <div class="card-body">
-                                <a href="" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add Company</a><br><br>
-                                <table id="bootstrap-data-table" class="table table-striped table-bordered table-responsive">
+                                <a href="{{route('companies.create')}}" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add Company</a><br><br>
+                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                       <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Logo</th>
                                         <th>Website / URL</th>
                                         <th>Action</th>
                                       </tr>
@@ -57,16 +55,18 @@
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{$company->name}}</td>
                                             <td>
-                                                <a href="mailto:{{$company->email}}">{{$company->email}}</a>
-                                            </td>
-                                            <td>{{$company->logo}}</td>
-                                            <td>
                                                 <a href="{{$company->website_url}}" target="_blank">{{$company->website_url}}</a>
                                             </td>
                                             <td>
-                                                <a href=""><i class="fa fa-eye"></i></a>
-                                                <a href=""><i class="fa fa-edit"></i></a>
-                                                <a href="" onclick="return confirm('Apakah anda yakin ?')"><i class="fa fa-trash-o"></i></a>
+                                                <a href="{{route('companies.show', [$company->id])}}"><i class="fa fa-eye" title="Company Detail"></i></a>
+                                                <a href="{{route('companies.edit', [$company->id])}}"><i class="fa fa-edit"></i></a>
+                                                <form action="{{route('companies.destroy', [$company->id])}}" method="POST" class="d-inline">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" style="border: none;" onclick="return confirm('Apakah anda yakin ?')">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                       @endforeach

@@ -89,17 +89,12 @@
                                 <strong class="card-title">Data User</strong>
                             </div>
                             <div class="card-body">
-                                <table id="bootstrap-data-table" class="table table-striped table-bordered table-responsive">
+                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                       <tr>
                                         <th>No</th>
                                         <th>Username</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
                                         <th>Email</th>
-                                        <th>Telepon</th>
-                                        <th>Company</th>
-                                        <th>Department</th>
                                         <th>Role</th>
                                         <th>Action</th>
                                       </tr>
@@ -109,19 +104,12 @@
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{$user->username}}</td>
-                                            <td>{{$user->first_name}}</td>
-                                            <td>{{$user->last_name}}</td>
                                             <td>
                                                 <a href="mailto:{{$user->email}}">{{$user->email}}</a>
                                             </td>
-                                            <td>
-                                                <a href="tel:{{$user->telepon}}">{{$user->telepon}}</a>
-                                            </td>
-                                            <td>{{$user->company->name}}</td>
-                                            <td>{{$user->department->name}}</td>
                                             <td>{{$user->role}}</td>
                                             <td>
-                                                <a href="{{route('show.user', [$user->id])}}"><i class="fa fa-eye"></i></a>
+                                                <a href="{{route('show.user', [$user->id])}}"><i class="fa fa-eye" title="User Detail"></i></a>
                                                 <a href="{{route('edit.user', [$user->id])}}"><i class="fa fa-edit"></i></a>
                                                 <a href="{{route('user.delete', [$user->id])}}" onclick="return confirm('Apakah anda yakin ?')"><i class="fa fa-trash-o"></i></a>
                                             </td>

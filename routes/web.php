@@ -40,9 +40,9 @@ Route::group(['middleware' => ['auth', 'Role:admin']], function(){
             ->name('user.delete');
 
 
-    Route::resource('/admin/departments', App\Http\Controllers\DepartmentController::class);
+    Route::resource('/admin/departments',   App\Http\Controllers\DepartmentController::class);
 
-    Route::resource('/admin/companies', App\Http\Controllers\CompanyController::class);
+    Route::resource('/admin/companies',     App\Http\Controllers\CompanyController::class);
 
 });
 

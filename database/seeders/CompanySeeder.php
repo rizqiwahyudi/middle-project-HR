@@ -28,6 +28,6 @@ class CompanySeeder extends Seeder
             'website_url' => 'https://wimisec.or.id',
         ]);
 
-        Company::factory(10)->create();
+        // Company::factory(10)->create();
     }
 }

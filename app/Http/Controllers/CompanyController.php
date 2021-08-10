@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class CompanyController extends Controller
 {
@@ -31,7 +35,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.company.create-company');
     }
 
     /**
@@ -42,7 +46,27 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|string|email|max:255|unique:companies',
+            'logo'    => 'required|image|mimes:jpeg,jpg,png,svg|max:2048|dimensions:min_width=100,min_height=100',
+            'website_url' => 'required|url|unique:companies,website_url',
+        ]);
+
+        $company = $request->all();
+
+        if ($request->file('logo')) {
+            $logo               = $request->file('logo');
+            $logo_name          = date('d-m-Y-H-i-s').'_'.$logo->hashName();
+            $company['logo']    = $logo_name;
+
+            $logo->storeAs('public/images', $logo_name);
+        }
+
+        Company::create($company);
+
+        return redirect()->route('companies.index')
+                         ->with('success', 'Company Berhasil Ditambahkan!');
     }
 
     /**
@@ -53,7 +77,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        //
+        return view('admin.company.show-company', compact('company'));
     }
 
     /**
@@ -64,7 +88,7 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        //
+        return view('admin.company.edit-company', compact('company'));
     }
 
     /**
@@ -76,7 +100,29 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        //
+        $request->validate([
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|string|email|max:255|'.Rule::unique('companies')->ignore($company->id),
+            'logo'    => 'image|mimes:jpeg,jpg,png,svg|max:2048|dimensions:min_width=100,min_height=100',
+            'website_url' => 'required|url|'.Rule::unique('companies')->ignore($company->id),
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('logo')) {
+            Storage::delete('public/images/'.$company->logo);
+
+            $logo               = $request->file('logo');
+            $logo_name          = date('d-m-Y-H-i-s').'_'.$logo->hashName();
+            $data['logo']       = $logo_name;
+
+            $logo->storeAs('public/images', $logo_name);
+        }
+
+        $company->update($data);
+
+        return redirect()->route('companies.index')
+                         ->with('success', 'Data Company Berhasil Diupdate!');
     }
 
     /**
@@ -87,6 +133,17 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        //
+        $logo = $company->logo;
+
+        $company->delete();
+        Storage::delete('public/images/'.$logo);
+
+        if ($company) {
+            return redirect()->route('companies.index')
+                             ->with('success', 'Data Company Berhasil Dihapus');
+        } else {
+            return redirect()->route('companies.index')
+                             ->with('error', 'Data Company Gagal Dihapus!');
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
 {
@@ -31,7 +32,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.department.create-department');
     }
 
     /**
@@ -42,7 +43,15 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'          => 'required|string|max:255|unique:departments,name',
+            'description'   => 'required|string',
+        ]);
+
+        Department::create($request->all());
+
+        return redirect()->route('departments.index')
+                         ->with('success', 'Company Berhasil Ditambahkan!');
     }
 
     /**
@@ -64,7 +73,7 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        //
+        return view('admin.department.edit-department', compact('department'));
     }
 
     /**
@@ -76,7 +85,15 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, Department $department)
     {
-        //
+        $request->validate([
+            'name'          => 'required|string|max:255|'.Rule::unique('departments')->ignore($department->id),
+            'description'   => 'required|string',
+        ]);
+
+        $department->update($request->all());
+
+        return redirect()->route('departments.index')
+                         ->with('success', 'Data Department Berhasil Diupdate!');
     }
 
     /**
@@ -87,6 +104,14 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        //
+        $department->delete();
+
+        if ($department) {
+            return redirect()->route('departments.index')
+                             ->with('success', 'Data Department Berhasil Dihapus');
+        } else {
+            return redirect()->route('departments.index')
+                             ->with('error', 'Data Department Gagal Dihapus!');
+        }
     }
 }

@@ -41,7 +41,6 @@ class UserController extends Controller
                 'departmentsCount', 
                 'employeesCount',
             ));
-            // return view('admin.index');
         }
             
         return view('user.index');
@@ -148,11 +147,11 @@ class UserController extends Controller
             'department'    => 'required|not_in:0',
             'role'          => 'required|not_in:0',
         ]);
-            
-        $user->update($request->all(), [
-            'company_id'    => $request['company'],
-            'department_id' => $request['department'],
-        ]);
+
+        $user->company_id       = $request->company;
+        $user->department_id    = $request->department;
+
+        $user->update($request->all());
 
         return redirect()->route('dashboard.admin')
                          ->with('success', 'Data User Berhasil Diupdate!');
