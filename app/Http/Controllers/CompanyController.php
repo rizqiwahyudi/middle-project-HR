@@ -133,8 +133,6 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        $logo = $company->logo;
-
         $company->delete();
 
         if ($company) {
@@ -180,6 +178,7 @@ class CompanyController extends Controller
             foreach ($logos as $logo) {
                 Storage::delete('public/images/'.$logo);
             }
+
             return redirect()->route('getDeletedCompanies')
                              ->with('success', 'Data Company Berhasil Dihapus Permanen');
         } else {
@@ -197,6 +196,7 @@ class CompanyController extends Controller
 
         if ($company) { 
             Storage::delete('public/images/'.$logo);
+
             return redirect()->route('getDeletedCompanies')
                              ->with('success', 'Data Company Berhasil Dihapus Permanen');
         } else {
