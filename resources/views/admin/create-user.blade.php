@@ -12,7 +12,7 @@
                 <div class="card-header">{{ __('Create User') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="">
+                    <form method="POST" action="{{route('create.user')}}">
                         @csrf
 
                         <div class="form-group row">

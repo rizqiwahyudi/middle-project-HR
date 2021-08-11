@@ -51,7 +51,7 @@ class DepartmentController extends Controller
         Department::create($request->all());
 
         return redirect()->route('departments.index')
-                         ->with('success', 'Company Berhasil Ditambahkan!');
+                         ->with('success', 'Department Berhasil Ditambahkan!');
     }
 
     /**
@@ -108,10 +108,75 @@ class DepartmentController extends Controller
 
         if ($department) {
             return redirect()->route('departments.index')
-                             ->with('success', 'Data Department Berhasil Dihapus');
+                             ->with('success', 'Data Department Berhasil Dihapus Sementara');
         } else {
             return redirect()->route('departments.index')
                              ->with('error', 'Data Department Gagal Dihapus!');
         }
     }
+
+    public function getDeletedDepartments()
+    {
+        $departments = Department::onlyTrashed()->get();
+
+        return view('admin.department.deleted-department', compact('departments'));
+    }
+
+    public function restoreAll()
+    {
+        $departments = Department::onlyTrashed();
+        $departments->restore();
+
+        if ($departments) {
+            return redirect()->route('departments.index')
+                             ->with('success', 'Data Department Berhasil Direstore');
+        } else {
+            return redirect()->route('getDeletedDepartments')
+                             ->with('error', 'Data Department Gagal Direstore');
+        }   
+    }
+
+    public function deleteAll()
+    {
+        $departments = Department::onlyTrashed();
+        $departments->forceDelete();
+
+        if ($departments) {
+            return redirect()->route('getDeletedDepartments')
+                             ->with('success', 'Data Department Berhasil Dihapus Permanen');
+        } else {
+            return redirect()->route('getDeletedDepartments')
+                             ->with('error', 'Data Department Gagal Dihapus!');
+        }
+    }
+
+    public function deletePermanent($id)
+    {
+        $department = Department::onlyTrashed()->where('id', $id);
+        $department->forceDelete();
+
+        if ($department) {
+            return redirect()->route('getDeletedDepartments')
+                             ->with('success', 'Data Department Berhasil Dihapus Permanen');
+        } else {
+            return redirect()->route('getDeletedDepartments')
+                             ->with('error', 'Data Department Gagal Dihapus!');
+        }
+    }
+
+    public function restore($id)
+    {
+        $department = Department::onlyTrashed()->where('id', $id);
+        $department->restore();
+
+        if ($department) {
+            return redirect()->route('departments.index')
+                             ->with('success', 'Data Department Berhasil Direstore');
+        } else {
+            return redirect()->route('getDeletedDepartments')
+                             ->with('error', 'Data Department Gagal Direstore');
+        }
+    }
+
+
 }

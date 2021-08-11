@@ -33,7 +33,17 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        @auth()
+                            @if(Auth::user()->role == 'admin')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('dashboard.admin') }}">{{ __('Dashboard Admin') }}</a>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('dashboard.user') }}">{{ __('Dashboard User') }}</a>
+                                </li>
+                            @endif
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->

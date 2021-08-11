@@ -136,14 +136,86 @@ class CompanyController extends Controller
         $logo = $company->logo;
 
         $company->delete();
-        Storage::delete('public/images/'.$logo);
 
         if ($company) {
             return redirect()->route('companies.index')
-                             ->with('success', 'Data Company Berhasil Dihapus');
+                             ->with('success', 'Data Company Berhasil Dihapus Sementara');
         } else {
             return redirect()->route('companies.index')
                              ->with('error', 'Data Company Gagal Dihapus!');
+        }
+    }
+
+    public function getDeletedCompanies()
+    {
+        $companies = Company::onlyTrashed()->get();
+
+        return view('admin.company.deleted-company', compact('companies'));
+    }
+
+    public function restoreAll()
+    {
+        $companies = Company::onlyTrashed();
+        $companies->restore();
+
+        if ($companies) {
+            return redirect()->route('companies.index')
+                             ->with('success', 'Data Company Berhasil Direstore');
+        } else {
+            return redirect()->route('getDeletedCompanies')
+                             ->with('error', 'Data Company Gagal Direstore');
+        }   
+    }
+
+    public function deleteAll()
+    {
+        $companies  = Company::onlyTrashed()->get();
+        $logos      = $companies->pluck('logo');
+
+        foreach ($companies as $company) {
+            $company->forceDelete();
+        }
+
+        if ($companies) {
+            foreach ($logos as $logo) {
+                Storage::delete('public/images/'.$logo);
+            }
+            return redirect()->route('getDeletedCompanies')
+                             ->with('success', 'Data Company Berhasil Dihapus Permanen');
+        } else {
+            return redirect()->route('getDeletedCompanies')
+                             ->with('error', 'Data Company Gagal Dihapus!');
+        }
+    }
+
+    public function deletePermanent($id)
+    {
+        $company    = Company::onlyTrashed()->firstWhere('id', $id);
+        $logo       = $company->logo;
+
+        $company->forceDelete();
+
+        if ($company) { 
+            Storage::delete('public/images/'.$logo);
+            return redirect()->route('getDeletedCompanies')
+                             ->with('success', 'Data Company Berhasil Dihapus Permanen');
+        } else {
+            return redirect()->route('getDeletedCompanies')
+                             ->with('error', 'Data Company Gagal Dihapus!');
+        }
+    }
+
+    public function restore($id)
+    {
+        $company = Company::onlyTrashed()->where('id', $id);
+        $company->restore();
+
+        if ($company) {
+            return redirect()->route('companies.index')
+                             ->with('success', 'Data Company Berhasil Direstore');
+        } else {
+            return redirect()->route('getDeletedCompanies')
+                             ->with('error', 'Data Company Gagal Direstore');
         }
     }
 }

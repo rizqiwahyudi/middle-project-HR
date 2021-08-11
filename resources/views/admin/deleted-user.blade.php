@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', '- Data Company')
-@section('breadcrumb', 'Data Company')
+@section('title', '- Deleted Users')
+@section('breadcrumb', 'Deleted Users')
 
 @section('content')
 
@@ -30,44 +30,40 @@
             @endif
 
             <div class="animated fadeIn">
-                    
-
 
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Data Company</strong>
+                                <strong class="card-title">Deleted Users</strong>
                             </div>
                             <div class="card-body">
-                                <a href="{{route('companies.create')}}" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add Company</a>
-                                <a href="{{route('getDeletedCompanies')}}" class="btn btn-outline-danger"><i class="fa fa-trash"></i> Trash</a><br><br>
+                                <a href="{{route('dashboard.admin')}}" class="btn btn-outline-primary">Kembali</a>
+                                <a href="{{route('deleteAll.users')}}" class="btn btn-outline-danger" onclick="return confirm('Apakah Anda Yakin Delete Permanen ?');">Delete All</a>
+                                <a href="{{route('restoreAll.users')}}" class="btn btn-outline-success">Restore All</a><br><br>
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                       <tr>
                                         <th>No</th>
-                                        <th>Name</th>
-                                        <th>Website / URL</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Deleted At</th>
                                         <th>Action</th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      @foreach($companies as $company)
+                                      @foreach($users as $user)
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
-                                            <td>{{$company->name}}</td>
+                                            <td>{{$user->username}}</td>
                                             <td>
-                                                <a href="{{$company->website_url}}" target="_blank">{{$company->website_url}}</a>
+                                                <a href="mailto:{{$user->email}}">{{$user->email}}</a>
                                             </td>
+                                            <td>{{$user->role}}</td>
+                                            <td>{{$user->deleted_at}}</td>
                                             <td>
-                                                <a href="{{route('companies.show', [$company->id])}}"><i class="fa fa-eye" title="Company Detail"></i></a>
-                                                <a href="{{route('companies.edit', [$company->id])}}"><i class="fa fa-edit"></i></a>
-                                                <form action="{{route('companies.destroy', [$company->id])}}" method="POST" class="d-inline">
-                                                    @method('DELETE')
-                                                    @csrf
-                                                    <button type="submit" style="border: none;" onclick="return confirm('Apakah anda yakin ?')">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
+                                                <a href="{{route('restore.user', [$user->id])}}" class="btn btn-sm btn-outline-primary">Restore</a>
+                                                <a href="{{route('deletePermanent.user', [$user->id])}}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda Yakin Delete Permanen ?');">Delete</a>
                                             </td>
                                         </tr>
                                       @endforeach

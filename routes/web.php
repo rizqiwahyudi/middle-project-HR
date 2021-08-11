@@ -30,6 +30,14 @@ Route::group(['middleware' => ['auth', 'Role:admin']], function(){
             ->name('create.user');
     Route::post('/admin/create-user/',      [App\Http\Controllers\UserController::class, 'store'])
             ->name('store.user');
+    Route::get('/admin/deleted-users/',     [App\Http\Controllers\UserController::class, 'getDeletedUsers'])
+            ->name('getDeletedUsers');
+    Route::get('/admin/deleted-users/delete-all/', 
+                                            [App\Http\Controllers\UserController::class, 'deleteAll'])
+            ->name('deleteAll.users');
+    Route::get('/admin/deleted-users/restore-all/', 
+                                            [App\Http\Controllers\UserController::class, 'restoreAll'])
+            ->name('restoreAll.users');
     Route::get('/admin/show-user/{user}',   [App\Http\Controllers\UserController::class, 'show'])
             ->name('show.user');
     Route::get('/admin/edit-user/{user}',   [App\Http\Controllers\UserController::class, 'edit'])
@@ -38,11 +46,52 @@ Route::group(['middleware' => ['auth', 'Role:admin']], function(){
             ->name('update.user');
     Route::get('/admin/delete-user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])
             ->name('user.delete');
+    Route::get('/admin/deleted-users/delete/{id}', 
+                                            [App\Http\Controllers\UserController::class, 'deletePermanent'])
+            ->name('deletePermanent.user');
+    Route::get('/admin/deleted-users/restore/{id}', 
+                                            [App\Http\Controllers\UserController::class, 'restore'])
+            ->name('restore.user');
 
+
+    Route::get('/admin/departments/deleted-departments/', 
+                                    [App\Http\Controllers\DepartmentController::class, 'getDeletedDepartments'])
+            ->name('getDeletedDepartments');
+    Route::get('/admin/departments/deleted-departments/delete-all/', 
+                                    [App\Http\Controllers\DepartmentController::class, 'deleteAll'])
+            ->name('deleteAll.departments');
+    Route::get('/admin/departments/deleted-departments/restore-all/', 
+                                    [App\Http\Controllers\DepartmentController::class, 'restoreAll'])
+            ->name('restoreAll.departments');
 
     Route::resource('/admin/departments',   App\Http\Controllers\DepartmentController::class);
 
+    Route::get('/admin/departments/deleted-departments/delete/{id}', 
+                                    [App\Http\Controllers\DepartmentController::class, 'deletePermanent'])
+            ->name('deletePermanent.department');
+    Route::get('/admin/departments/deleted-departments/restore/{id}', 
+                                    [App\Http\Controllers\DepartmentController::class, 'restore'])
+            ->name('restore.department');
+
+
+    Route::get('/admin/companies/deleted-companies/', 
+                                    [App\Http\Controllers\CompanyController::class, 'getDeletedCompanies'])
+            ->name('getDeletedCompanies');
+    Route::get('/admin/companies/deleted-companies/delete-all/', 
+                                    [App\Http\Controllers\CompanyController::class, 'deleteAll'])
+            ->name('deleteAll.companies');
+    Route::get('/admin/companies/deleted-companies/restore-all/', 
+                                    [App\Http\Controllers\CompanyController::class, 'restoreAll'])
+            ->name('restoreAll.companies');
+
     Route::resource('/admin/companies',     App\Http\Controllers\CompanyController::class);
+
+    Route::get('/admin/companies/deleted-companies/delete/{id}', 
+                                    [App\Http\Controllers\CompanyController::class, 'deletePermanent'])
+            ->name('deletePermanent.company');
+    Route::get('/admin/companies/deleted-companies/restore/{id}', 
+                                    [App\Http\Controllers\CompanyController::class, 'restore'])
+            ->name('restore.company');
 
 });
 

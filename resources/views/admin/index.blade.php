@@ -89,6 +89,7 @@
                                 <strong class="card-title">Data User</strong>
                             </div>
                             <div class="card-body">
+                                <a href="{{route('getDeletedUsers')}}" class="btn btn-outline-danger"><i class="fa fa-trash"></i> Trash</a><br><br>
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                       <tr>

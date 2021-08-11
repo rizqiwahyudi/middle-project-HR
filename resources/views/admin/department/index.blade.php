@@ -39,7 +39,8 @@
                                 <strong class="card-title">Data Department</strong>
                             </div>
                             <div class="card-body">
-                                <a href="{{route('departments.create')}}" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add Department</a><br><br>
+                                <a href="{{route('departments.create')}}" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add Department</a>
+                                <a href="{{route('getDeletedDepartments')}}" class="btn btn-outline-danger"><i class="fa fa-trash"> Trash</i></a><br><br>
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                       <tr>

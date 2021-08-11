@@ -169,9 +169,72 @@ class UserController extends Controller
 
         if ($user) {
             return redirect()->route('dashboard.admin')
-                             ->with('success', 'Data User Berhasil Dihapus');
+                             ->with('success', 'Data User Berhasil Dihapus Sementara');
         } else {
             return redirect()->route('dashboard.admin')
+                             ->with('error', 'Data User Gagal Dihapus!');
+        }
+    }
+
+    public function getDeletedUsers()
+    {
+        $users = User::onlyTrashed()->get();
+
+        return view('admin.deleted-user', compact('users'));
+    }
+
+    public function deletePermanent($id)
+    {
+        $user = User::onlyTrashed()->where('id', $id);
+        $user->forceDelete();
+
+        if ($user) {
+            return redirect()->route('getDeletedUsers')
+                             ->with('success', 'Data User Berhasil Dihapus Permanen');
+        } else {
+            return redirect()->route('getDeletedUsers')
+                             ->with('error', 'Data User Gagal Dihapus!');
+        }
+    }
+
+    public function restore($id)
+    {
+        $user = User::onlyTrashed()->where('id', $id);
+        $user->restore();
+
+        if ($user) {
+            return redirect()->route('dashboard.admin')
+                             ->with('success', 'Data User Berhasil Direstore');
+        } else {
+            return redirect()->route('getDeletedUsers')
+                             ->with('error', 'Data User Gagal Direstore');
+        }
+    }
+
+    public function restoreAll()
+    {
+        $users = User::onlyTrashed();
+        $users->restore();
+
+        if ($users) {
+            return redirect()->route('dashboard.admin')
+                             ->with('success', 'Data User Berhasil Direstore');
+        } else {
+            return redirect()->route('getDeletedUsers')
+                             ->with('error', 'Data User Gagal Direstore');
+        }   
+    }
+
+    public function deleteAll()
+    {
+        $users = User::onlyTrashed();
+        $users->forceDelete();
+
+        if ($users) {
+            return redirect()->route('getDeletedUsers')
+                             ->with('success', 'Data User Berhasil Dihapus Permanen');
+        } else {
+            return redirect()->route('getDeletedUsers')
                              ->with('error', 'Data User Gagal Dihapus!');
         }
     }
