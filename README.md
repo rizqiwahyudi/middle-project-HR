@@ -35,6 +35,12 @@ php artisan migrate --seed
 ```
 
 > **NOTE : Make sure the web server and database are turned on before migration command**
+
+### Symlink Storage For Store Public Files
+```
+php artisan storage:link
+```
+
 ### And Lastly, Run the server
 ```
 php artisan serve
