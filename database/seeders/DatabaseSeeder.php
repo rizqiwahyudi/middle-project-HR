@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        exec('rm public/storage/images/*');
         $this->call([
             CompanySeeder::class,
             DepartmentSeeder::class,
