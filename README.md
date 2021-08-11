@@ -29,7 +29,7 @@ php artisan key:generate
 ```
 php artisan migrate
 ```
-or You can make the seed with the following command :
+or You can make the seed with the following command (RECOMMENDED) :
 ```
 php artisan migrate --seed
 ```
