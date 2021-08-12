@@ -25,6 +25,11 @@ or you can copy the file in your File Manager.
 php artisan key:generate
 ```
 
+### Symlink Storage For Store Public Files
+```
+php artisan storage:link
+```
+
 ### Initiate The Database Migration
 ```
 php artisan migrate
@@ -35,11 +40,6 @@ php artisan migrate --seed
 ```
 
 > **NOTE : Make sure the web server and database are turned on before migration command**
-
-### Symlink Storage For Store Public Files
-```
-php artisan storage:link
-```
 
 ### And Lastly, Run the server
 ```
