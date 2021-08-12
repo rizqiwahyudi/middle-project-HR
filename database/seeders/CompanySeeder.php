@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Company;
+use Illuminate\Support\Facades\Storage;
 
 class CompanySeeder extends Seeder
 {
@@ -14,6 +15,10 @@ class CompanySeeder extends Seeder
      */
     public function run()
     {
+        if (!Storage::exists("public/images")) {
+            Storage::makeDirectory("public/images");
+        }
+
         Company::create([
             'name' => 'PT. Alton Mitra Sejahtera',
             'email' => 'alton.indonesia@gmail.com',
@@ -28,6 +33,6 @@ class CompanySeeder extends Seeder
             'website_url' => 'https://wimisec.or.id',
         ]);
 
-        Company::factory(50)->create();
+        Company::factory(10)->create();
     }
 }
