@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Http\Requests\StoreDepartmentRequest;
+use App\Http\Requests\UpdateDepartmentRequest;
 
 class DepartmentController extends Controller
 {
@@ -41,14 +42,11 @@ class DepartmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDepartmentRequest $request)
     {
-        $request->validate([
-            'name'          => 'required|string|max:255|unique:departments,name',
-            'description'   => 'required|string',
-        ]);
+        $validatedData = $request->validated();
 
-        Department::create($request->all());
+        Department::create($validatedData);
 
         return redirect()->route('departments.index')
                          ->with('success', 'Department Berhasil Ditambahkan!');
@@ -83,14 +81,11 @@ class DepartmentController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Department $department)
+    public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        $request->validate([
-            'name'          => 'required|string|max:255|'.Rule::unique('departments')->ignore($department->id),
-            'description'   => 'required|string',
-        ]);
+        $validatedData = $request->validated();
 
-        $department->update($request->all());
+        $department->update($validatedData);
 
         return redirect()->route('departments.index')
                          ->with('success', 'Data Department Berhasil Diupdate!');

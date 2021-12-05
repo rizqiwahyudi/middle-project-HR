@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
+use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 
 class CompanyController extends Controller
 {
@@ -44,26 +44,19 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCompanyRequest $request)
     {
-        $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|string|email|max:255|unique:companies',
-            'logo'    => 'required|image|mimes:jpeg,jpg,png,svg|max:2048|dimensions:min_width=100,min_height=100',
-            'website_url' => 'required|url|unique:companies,website_url',
-        ]);
-
-        $company = $request->all();
+        $validatedData = $request->validated();
 
         if ($request->file('logo')) {
-            $logo               = $request->file('logo');
-            $logo_name          = date('d-m-Y-H-i-s').'_'.$logo->hashName();
-            $company['logo']    = $logo_name;
+            $logo                     = $request->file('logo');
+            $logo_name                = date('d-m-Y-H-i-s').'_'.$logo->hashName();
+            $validatedData['logo']    = $logo_name;
 
             $logo->storeAs('public/images', $logo_name);
         }
 
-        Company::create($company);
+        Company::create($validatedData);
 
         return redirect()->route('companies.index')
                          ->with('success', 'Company Berhasil Ditambahkan!');
@@ -98,28 +91,21 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|string|email|max:255|'.Rule::unique('companies')->ignore($company->id),
-            'logo'    => 'image|mimes:jpeg,jpg,png,svg|max:2048|dimensions:min_width=100,min_height=100',
-            'website_url' => 'required|url|'.Rule::unique('companies')->ignore($company->id),
-        ]);
-
-        $data = $request->all();
+        $validatedData = $request->validated();
 
         if ($request->hasFile('logo')) {
             Storage::delete('public/images/'.$company->logo);
 
-            $logo               = $request->file('logo');
-            $logo_name          = date('d-m-Y-H-i-s').'_'.$logo->hashName();
-            $data['logo']       = $logo_name;
+            $logo                  = $request->file('logo');
+            $logo_name             = date('d-m-Y-H-i-s').'_'.$logo->hashName();
+            $validatedData['logo'] = $logo_name;
 
             $logo->storeAs('public/images', $logo_name);
         }
 
-        $company->update($data);
+        $company->update($validatedData);
 
         return redirect()->route('companies.index')
                          ->with('success', 'Data Company Berhasil Diupdate!');

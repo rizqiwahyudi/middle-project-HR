@@ -7,9 +7,9 @@ use App\Models\Company;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -64,37 +64,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'username'      => ['required', 'string', 'max:255', 'unique:users'],
-            'first_name'    => ['required', 'string', 'max:100'],
-            'last_name'     => ['required', 'string', 'max:100'],
-            'telepon'       => ['required', 'numeric', 'digits_between:10,13', 'unique:users'],
-            'email'         => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password'      => ['required', 'string', 'min:8', 'confirmed'],
-            'company'       => ['required', 'not_in:0'],
-            'department'    => ['required', 'not_in:0'],
-            'role'          => ['required', 'not_in:0'],
-        ]);
+        $validatedData = $request->validated();
+        
+        $validatedData['password']      = Hash::make($validatedData['password']);
+        $validatedData['company_id']    = $validatedData['company'];
+        $validatedData['department_id'] = $validatedData['department'];
 
-        if ($validator->fails()) {
-            return redirect()->route('create.user')
-                             ->withErrors($validator)
-                             ->withInput();
-        }
-
-        User::create([
-            'username'      => $request['username'],
-            'first_name'    => $request['first_name'],
-            'last_name'     => $request['last_name'],
-            'telepon'       => $request['telepon'],
-            'email'         => $request['email'],
-            'password'      => Hash::make($request['password']),
-            'company_id'    => $request['company'],
-            'department_id' => $request['department'],
-            'role'          => $request['role'],
-        ]);
+        User::create($validatedData);
 
         return redirect()->route('dashboard.admin')
                          ->with('success', 'User Berhasil Ditambahkan!');
@@ -135,23 +113,14 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $request->validate([
-            'username'      => 'required|string|max:255'.Rule::unique('users')->ignore($user->id),
-            'first_name'    => 'required|string|max:100',
-            'last_name'     => 'required|string|max:100',
-            'telepon'       => 'required|numeric|digits_between:10,13'.Rule::unique('users')->ignore($user->id),
-            'email'         => 'required|string|email|max:255'.Rule::unique('users')->ignore($user->id),
-            'company'       => 'required|not_in:0',
-            'department'    => 'required|not_in:0',
-            'role'          => 'required|not_in:0',
-        ]);
+        $validatedData = $request->validated();
+        
+        $user->company_id       = $validatedData['company'];
+        $user->department_id    = $validatedData['department'];
 
-        $user->company_id       = $request->company;
-        $user->department_id    = $request->department;
-
-        $user->update($request->all());
+        $user->update($validatedData);
 
         return redirect()->route('dashboard.admin')
                          ->with('success', 'Data User Berhasil Diupdate!');
