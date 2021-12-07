@@ -26,24 +26,17 @@ class UserController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
+        $users              = User::all();
+        $companiesCount     = Company::count();
+        $departmentsCount   = Department::count();
+        $employeesCount     = User::count();
 
-        if ($user->role == 'admin') {
-
-            $users              = User::all();
-            $companiesCount     = Company::count();
-            $departmentsCount   = Department::count();
-            $employeesCount     = User::count();
-
-            return view('admin.index', compact(
-                'users', 
-                'companiesCount',                            
-                'departmentsCount', 
-                'employeesCount',
-            ));
-        }
-            
-        return view('user.index');
+        return view('admin.user.index', compact(
+            'users', 
+            'companiesCount',                            
+            'departmentsCount', 
+            'employeesCount',
+        ));
     }
 
     /**
@@ -55,7 +48,7 @@ class UserController extends Controller
     {
         $companies      = Company::all();
         $departments    = Department::all();
-        return view('admin.create-user', compact('companies', 'departments'));
+        return view('admin.user.create-user', compact('companies', 'departments'));
     }
 
     /**
@@ -86,7 +79,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('admin.show-user', compact('user'));
+        return view('admin.user.show-user', compact('user'));
     }
 
     /**
@@ -99,7 +92,7 @@ class UserController extends Controller
     {
         $companies      = Company::all();
         $departments    = Department::all();
-        return view('admin.edit-user', compact([
+        return view('admin.user.edit-user', compact([
             'companies', 
             'departments', 
             'user',
@@ -149,7 +142,7 @@ class UserController extends Controller
     {
         $users = User::onlyTrashed()->get();
 
-        return view('admin.deleted-user', compact('users'));
+        return view('admin.user.deleted-user', compact('users'));
     }
 
     public function deletePermanent($id)

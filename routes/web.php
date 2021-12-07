@@ -21,6 +21,10 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Auth::routes();
 
+Route::group(['middleware' => ['auth']], function() {
+        Route::get('/checkRole', [App\Http\Controllers\HomeController::class, 'checkRole'])
+                ->name('checkRole');
+});
 
 Route::group(['middleware' => ['auth', 'Role:admin']], function(){
 
@@ -44,7 +48,7 @@ Route::group(['middleware' => ['auth', 'Role:admin']], function(){
             ->name('edit.user');
     Route::put('/admin/edit-user/{user}',   [App\Http\Controllers\UserController::class, 'update'])
             ->name('update.user');
-    Route::get('/admin/delete-user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])
+    Route::delete('/admin/delete-user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])
             ->name('user.delete');
     Route::get('/admin/deleted-users/delete/{id}', 
                                             [App\Http\Controllers\UserController::class, 'deletePermanent'])
@@ -98,7 +102,8 @@ Route::group(['middleware' => ['auth', 'Role:admin']], function(){
 
 Route::group(['middleware' => ['auth', 'Role:user']], function(){
 
-    Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])
-            ->name('dashboard.user');
+    Route::get('/user', function() {
+            return view('user.index');
+    })->name('dashboard.user');
 
 });
