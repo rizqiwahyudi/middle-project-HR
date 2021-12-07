@@ -48,7 +48,7 @@ Route::group(['middleware' => ['auth', 'Role:admin']], function(){
             ->name('edit.user');
     Route::put('/admin/edit-user/{user}',   [App\Http\Controllers\UserController::class, 'update'])
             ->name('update.user');
-    Route::delete('/admin/delete-user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])
+    Route::get('/admin/delete-user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])
             ->name('user.delete');
     Route::get('/admin/deleted-users/delete/{id}', 
                                             [App\Http\Controllers\UserController::class, 'deletePermanent'])
